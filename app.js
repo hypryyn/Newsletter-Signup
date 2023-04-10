@@ -44,16 +44,17 @@ app.post("/", function (req, res) {
         auth: "hypryyn:" + apiKey,
     }
     const request = https.request(url, options, function (response) {
-
-        if (response.statusCode === 200) {
-            res.sendFile(__dirname + "/success.html");
-        } else {
-            res.sendFile(__dirname + "/failure.html");
-        }
-
-
         response.on("data", function (data) {
             console.log(JSON.parse(data));
+            if ((JSON.parse(data)).error_count === 0) {
+                console.log(response.statusCode);
+                res.sendFile(__dirname + '/success.html');
+            } else if ((JSON.parse(data)).errors[0].error_code === 'ERROR_CONTACT_EXISTS' || (JSON.parse(data)).errors[0].error_code === 'ERROR_GENERIC') {
+                res.sendFile(__dirname + '/failure.html');
+            };
+
+
+
         })
     })
 
@@ -62,7 +63,7 @@ app.post("/", function (req, res) {
 
 });
 
-app.post("/failure", function(req, res) {
+app.post("/failure", function (req, res) {
     res.redirect("/");
 })
 
