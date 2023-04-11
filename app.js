@@ -52,9 +52,6 @@ app.post("/", function (req, res) {
             } else if ((JSON.parse(data)).errors[0].error_code === 'ERROR_CONTACT_EXISTS' || (JSON.parse(data)).errors[0].error_code === 'ERROR_GENERIC') {
                 res.sendFile(__dirname + '/failure.html');
             };
-
-
-
         })
     })
 
